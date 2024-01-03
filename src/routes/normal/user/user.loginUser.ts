@@ -7,11 +7,12 @@ import { createJWT, createRefreshToken } from '../../../jwt/creation_token';
 async function loginUser (req: Request, res: Response) {
 	try {
 		const { credential, password } = req.body;
+	
+		if (!credential || !password) return res.status(400).json({ message: '/user/login: Missing parameters' });
 
 		// check if credential is an email or a username
 		let is_email = credential.includes('@');
 
-		if (!credential || !password) return res.status(400).json({ message: '/user/login: Missing parameters' });
 
 		const user: User = await User.findOne({
 			where: (is_email) ? { email: credential } : { username: credential },
