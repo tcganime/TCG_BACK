@@ -15,9 +15,9 @@ async function updateUserPassword(req: Request, res: Response) {
 
 		if (!user) return res.status(404).json({ message: '/user/update/password: User not found' });
 
-		const updateUser = await user.update({
-			password: bcrypt.hashSync(password, 10)
-		});
+		let bycryptPassword = bcrypt.hashSync(password, 10);
+
+		const updateUser = User.update({ password: bycryptPassword }, { where: { id: req.body.id } });
 
 		if (!updateUser) return res.status(500).json({ message: '/user/update/password: Internal Error' });
 		res.status(201).json({ message: '/user/update/password: User password updated' });
