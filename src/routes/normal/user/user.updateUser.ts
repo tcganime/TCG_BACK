@@ -10,9 +10,11 @@ async function updateUser (req: Request, res: Response) {
 
 		if (!check_email(email)) return res.status(401).json({ message: '/user/update: Email wrong format' });
 
-		const updateUser = await User.update({ username, email, profile_picture }, { where: { id: req.body.id } });
+		const user = await User.findByPk(req.body.id);
 
-		if (!updateUser) return res.status(404).json({ message: '/user/update: User not found' });
+		if (!user) return res.status(404).json({ message: '/user/update: User not found' });
+
+		const updateUser = await User.update({ username, email, profile_picture }, { where: { id: req.body.id } });
 
 		res.status(201).json({ message: '/user/update: User updated' });
 	} catch (err) {
