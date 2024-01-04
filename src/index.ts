@@ -15,6 +15,9 @@ import app from './init/express';
 // Initialize secret key
 secretKey.generateSecretKey();
 
+// know if the arg --sync is passed
+const sync = process.argv.includes('--sync');
+
 // Initialize sequelize and start server
 async function startServer() {
   try {
@@ -26,7 +29,7 @@ async function startServer() {
     console.log('Connection has been established successfully.');
 
     // Synchronize the model with the database
-    await sequelize.sync();
+    await sequelize.sync({ force: sync });
     console.log('Database synchronized.');
 
     // Swagger UI options for custom sorting
