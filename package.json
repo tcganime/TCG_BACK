@@ -7,7 +7,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node src/index.ts",
     "build": "tsc",
-    "test:unit": "jest --coverage --verbose",
     "fresh-start": "ts-node src/index.ts --sync"
   },
   "keywords": [],
