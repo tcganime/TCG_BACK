@@ -8,7 +8,7 @@ async function profileUser(req: Request, res: Response) {
         });
         res.json(user);
     } catch (err) {
-        console.warn(err);
+        res.status(500).json({message: `/user/profile: Internal Error: ${err.message}`});
     }
 }
 

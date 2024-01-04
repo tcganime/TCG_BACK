@@ -39,7 +39,6 @@ async function createUser(req: Request, res: Response) {
 		res.status(201).json({ message: '/user/create: User created' });
 
 	} catch (err) {
-		console.log(err.message)
 		res.status(500).json({ message: `/user/create: Internal Error: ${err.message}` });
 	}
 };
