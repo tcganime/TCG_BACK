@@ -12,6 +12,7 @@ import sequelize from '../init/sequelize';
  *           type: integer
  *         name:
  *           type: string
+ *           unique: true
  *         created_at:
  *           type: string
  *           format: date-time
