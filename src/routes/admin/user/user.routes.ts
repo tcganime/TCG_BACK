@@ -9,6 +9,7 @@ import userDebug from './user.debug';
 import getUserByIdAdmin from './user.getUserByIdAdmin';
 import makeAdminById from './user.makeAdminById';
 import deleteById from './user.deleteById';
+import userLoginAdmin from './user.userLoginAdmin';
 
 const router = Router();
 
@@ -89,6 +90,51 @@ router.get('/debug', verifyAdminToken, userDebug);
  */
 
 router.get('/:id', verifyAdminToken, getUserByIdAdmin);
+
+/**
+ * @swagger
+ * /admin/user/login:
+ *   post:
+ *     summary: Admin user login
+ *     tags: [Admin_Users]
+ *     description: Logs in an admin user with the provided credentials and password.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               credential:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *             required:
+ *               - credential
+ *               - password
+ *     responses:
+ *       200:
+ *         description: Success - Returns tokens for authentication
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                 refresh_token:
+ *                   type: string
+ *       400:
+ *         description: Bad Request - Missing parameters
+ *       401:
+ *         description: Unauthorized - Wrong password or user is not an admin
+ *       404:
+ *         description: Not Found - User not found
+ *       500:
+ *         description: Internal Server Error
+ */
+
+router.post('/login', userLoginAdmin);
 
 /**
  * @swagger
