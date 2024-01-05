@@ -10,7 +10,11 @@ import adminRouter from './routes/admin/admin.router';
 import normalRouter from './routes/normal/normal.router';
 import swaggerOptions from './init/swagger';
 
-import app from './init/express';
+import bodyParser from "body-parser";
+import cors from "cors";
+import express from "express";
+
+const app = express();
 
 // Initialize secret key
 secretKey.generateSecretKey();
@@ -21,6 +25,21 @@ const sync = process.argv.includes('--sync');
 // Initialize sequelize and start server
 async function startServer() {
   try {
+
+    var jsonParser = bodyParser.json()
+
+    // Add general middlewares to main router
+    app.use(cors({origin: true, credentials: true}));
+    
+    app.use(function(req, res, next) {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header('Access-Control-Allow-Methods', 'DELETE, PUT, GET, POST');
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      next();
+    });
+
+    app.use(jsonParser);
+
     // Import sequelize after initializing the app
     const sequelize = require('./init/sequelize').default;
 
