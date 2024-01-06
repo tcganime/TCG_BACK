@@ -10,6 +10,7 @@ import getUserByIdAdmin from './user.getUserByIdAdmin';
 import makeAdminById from './user.makeAdminById';
 import deleteById from './user.deleteById';
 import userLoginAdmin from './user.userLoginAdmin';
+import RemoveAdminById from './user.removeAdminById';
 
 const router = Router();
 
@@ -140,7 +141,7 @@ router.post('/login', userLoginAdmin);
  * @swagger
  * /admin/makeAdmin/{id}:
  *   put:
- *     summary: Make a user admin
+ *     summary: Make a user admin. Only superadmins can do this.
  *     tags: [Admin_Users]
  *     description: Make a user admin by setting the 'admin' flag to true.
  *     parameters:
@@ -182,11 +183,46 @@ router.put('/makeAdmin/:id', verifyAdminToken, makeAdminById);
 
 /**
  * @swagger
- * /admin/user/delete/{id}:
+ * /admin/user/removeAdmin/{id}:
+ *   put:
+ *     summary: Remove admin status by ID
+ *     tags: [Admin_Users]
+ *     description: Removes admin status from a user by ID.
+ *     security:
+ *       - Bearer JWT: []
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Bearer token for authentication
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID of the user to remove admin status
+ *     responses:
+ *       201:
+ *         description: Success - User is no longer admin
+ *       403:
+ *         description: Forbidden - Insufficient permissions
+ *       404:
+ *         description: Not Found - User not found
+ *       500:
+ *         description: Internal Server Error
+ */
+
+router.put('/removeAdmin/:id', verifyAdminToken, RemoveAdminById);
+
+/**
+ * @swagger
+ * /admin/user/{id}:
  *   delete:
  *     summary: Delete user by ID
  *     tags: [Admin_Users]
- *     description: Deletes a user by ID.
+ *     description: Deletes a user by ID. Only superadmins can delete other admins.
  *     parameters:
  *       - in: path
  *         name: id

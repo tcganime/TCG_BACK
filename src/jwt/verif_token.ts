@@ -51,7 +51,7 @@ function VerifTokenPassId(req: Request, res: Response, next: Function) {
 
     jwt.verify(token, secret_key.getSecretKey, (err: any, decoded: {id: number, admin: boolean, refresh: boolean}) => {
         if (err) return res.status(403).json({ message: 'Forbidden' });
-        if (!decoded.refresh) return res.status(403).json({ message: 'Forbidden' });
+        if (decoded.refresh) return res.status(403).json({ message: 'Forbidden' });
         req.body.id = decoded.id;
 
         userStillExists(decoded.id).then((exists) => {

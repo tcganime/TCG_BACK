@@ -14,6 +14,7 @@ import sequelize from '../init/sequelize';
  *           type: string
  *         email:
  *           type: string
+ *           format: email
  *         password:
  *           type: string
  *         created_at:
@@ -23,6 +24,8 @@ import sequelize from '../init/sequelize';
  *           type: string
  *           format: date-time
  *         admin:
+ *           type: boolean
+ *         superadmin:
  *           type: boolean
  *         victories:
  *           type: integer
@@ -65,6 +68,7 @@ interface UserAttributes {
   victories: number;
   defeats: number;
   profile_picture: string | null;
+  superadmin: boolean;
 }
 
 interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'created_at' | 'updated_at'> {}
@@ -80,6 +84,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public victories!: number;
   public defeats!: number;
   public profile_picture!: string | null;
+  public superadmin!: boolean;
 }
 
 User.init(
@@ -90,7 +95,10 @@ User.init(
       primaryKey: true,
     },
     username: DataTypes.STRING,
-    email: DataTypes.STRING,
+    email: {
+      type: DataTypes.STRING,
+      unique: true,
+    },
     password: DataTypes.STRING,
     created_at: {
       type: DataTypes.DATE(6), // Include milliseconds precision
@@ -115,6 +123,10 @@ User.init(
     profile_picture: {
       type: DataTypes.STRING,
       defaultValue: null,
+    },
+    superadmin: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
     },
   },
   {
