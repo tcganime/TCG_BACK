@@ -9,7 +9,7 @@ async function makeAdminById (req: Request, res: Response) {
         if (!requester) return res.status(404).json({ message: 'User not found' });
         if (!user) return res.status(404).json({ message: 'User not found' });
 
-        if (!requester.superadmin) return res.status(403).json({ message: 'Forbidden' });
+        if ((!requester.superadmin) && (user.admin)) return res.status(403).json({ message: 'Forbidden' });
 
         user.admin = true;
 

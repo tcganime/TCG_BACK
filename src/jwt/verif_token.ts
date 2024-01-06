@@ -17,7 +17,8 @@ function verifyAdminToken(req: Request, res: Response, next: Function) {
     if (!token) return res.status(401).json({ message: 'No token provided' });
 
     jwt.verify(token, secret_key.getSecretKey, (err: any, decoded: {id: number, admin: boolean, refresh: boolean}) => {
-        if (err) return res.status(403).json({ message: 'Forbidden' });
+        if (err) res.status(403).json({ message: 'Forbidden' });
+
         if (decoded.refresh) return res.status(403).json({ message: 'Forbidden' });
         if (!decoded.admin) return res.status(403).json({ message: 'Forbidden' });
 
